@@ -2,6 +2,7 @@ import React from "react";
 
 function PopupWithForm(props) {
   let popupContent = props.popupContent;
+
   const [onClose, handlePopupClose] = React.useState();
 
   function hendleClickCloseButton() {
@@ -10,7 +11,6 @@ function PopupWithForm(props) {
 
   return (
     <div
-      // className={`popup popup_type_${props.name}`}
       className={ onClose ? `popup popup_type_${props.name}` : `popup popup_type_${props.name} popup_visible`}
       id={`popup_type_${props.name}`}
     >

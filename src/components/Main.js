@@ -1,48 +1,36 @@
 import React from "react";
 import editAvatarIcon from "../image/icon/edit-avatar.svg";
 import api from "../utils/Api";
+import Card from "./Card";
 
 function Main(props) {
   const handleEditProfileClick = props.onEditProfile;
   const handleEditAvatarClick = props.onEditAvatar;
   const handleAddPlaceClick = props.onAddPlace;
+  // const handleCardClick = props.onCardClick;
 
-  // let userName = "test";
-  // let userDescription = "Test";
-  // let userAvatar = "https://images.app.goo.gl/g2amFfdbb1EHaTyL8";
-
-  const [userInfo, setUserInfo] = React.useState({
-    userName: "user name",
-    userDescription: "about",
-    userAvatar: "https://images.app.goo.gl/g2amFfdbb1EHaTyL8",
-  });
+  const [userInfo, setUserInfo] = React.useState([]);
 
   React.useEffect(() => {
     api.loadUserInfo().then((userData) => {
-      setUserInfo(userData)({
+      setUserInfo({
         userName: userData.name,
         userDescription: userData.about,
         userAvatar: userData.avatar,
-      }).catch((err) => {
-        console.log(`ошибка загрузки стартовых данных ${err}`);
-      });
+      })
     });
-  }, [] );
+  }, []);
 
-  // const [cards, getInitialCard] = React.useState([]);
+  const [cards, setCards] = React.useState([]);
 
-  // React.useEffect(() => {
-  //   api.getInitialCards().then((cardArray) => {
-  //     getInitialCard(cardArray) {
-  //       cardArray.array.forEach(element => {
-  //         cards.append(    )
-  //       });
-  //     }
-  //     }).catch((err) => {
-  //       console.log(`ошибка загрузки стартовых данных ${err}`);
-  //     });
-  //   });
-  // });
+    React.useEffect(() => {
+    api.getInitialCards().then((data) => {
+      setCards(data);
+    })
+    .catch((err) => {
+      console.log(`ошибка загрузки стартовых данных ${err}`);
+    });
+  });
 
   return (
     <main className="content">
@@ -76,7 +64,11 @@ function Main(props) {
         />
       </section>
       <section aria-label="Список карточек">
-        <ul className="cards-list" />
+        <ul className="cards-list">
+          {cards.map((card) => (
+            <Card card={card} key={card._id} onClick={(card)=>{props.onCardClick(card)}} />
+          ))}
+        </ul>
       </section>
     </main>
   );

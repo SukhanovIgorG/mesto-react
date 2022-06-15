@@ -1,6 +1,6 @@
 class Api {
   constructor(option) {
-    this._baseUrl = option.baseUrl,
+    this._baseUrl = option.baseUrl
     this._headers = option.headers
   }
 
