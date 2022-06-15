@@ -1,30 +1,27 @@
-import React from "react";
-
-function PopupWithForm(props) {
-  let popupContent = props.popupContent;
-
-  const [onClose, handlePopupClose] = React.useState();
-
+function PopupWithForm({ isOpen, onClose, name, title, textButton, children }) {
   function hendleClickCloseButton() {
-    handlePopupClose(!onClose);
+    onClose();
   }
 
   return (
     <div
-      className={ onClose ? `popup popup_type_${props.name}` : `popup popup_type_${props.name} popup_visible`}
-      id={`popup_type_${props.name}`}
+      className={`popup popup_type_${name} ${isOpen && "popup_visible"}`}
+      id={`popup_type_${name}`}
     >
       <div className="popup__container popup__container_type_dialog">
-        <h2 className="popup__header">{props.title}</h2>
+        <h2 className="popup__header">{title}</h2>
         <form
-          className={`form form_type_${props.name}`}
-          id={`form_type_${props.name}`}
-          name={`form_type_${props.name}`}
+          className={`form form_type_${name}`}
+          id={`form_type_${name}`}
+          name={`form_type_${name}`}
           action="/apply/"
           method="POST"
           noValidate
         >
-          {popupContent}
+          {children}
+          <button className="form__button form-profile-button" type="submit">
+            {textButton}
+          </button>
         </form>
         <button
           onClick={hendleClickCloseButton}
