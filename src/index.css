@@ -26,6 +26,8 @@ code {
 @import url(./blocks/card/__like/card_like.css);
 @import url(./blocks/card/__title/card__title.css);
 @import url(./blocks/card/__trash/card__trash.css);
+@import url(./blocks/card/__trash/card__trash_visible.css);
+@import url(./blocks/card/__trash/card__trash_hidden.css);
 @import url(./blocks/card/__like-counter/card__like-counter.css);
 @import url(./blocks/card/__like-box/card__like-box.css);
 

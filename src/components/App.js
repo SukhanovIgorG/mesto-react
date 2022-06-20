@@ -4,6 +4,8 @@ import Main from "./Main";
 import Footer from "./Footer";
 import PopupWithForm from "./PopupWithForm";
 import ImagePopup from "./ImagePopup";
+import api from "../utils/Api";
+import { CurrentUserContext } from "../context/CurrentUserContext";
 
 function App() {
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] =
@@ -16,6 +18,21 @@ function App() {
     link: "",
   });
   const [isPopupWithImageOpen, setIsPopupWithImageOpen] = React.useState(false);
+
+  const [currentUser, setCurrentUser] = React.useState({});
+
+  React.useEffect(() => {
+    api
+      .loadUserInfo()
+      .then((userData) => {
+        console.log("получен обьект с информацией -" +  userData + userData.name);
+        setCurrentUser(userData);
+          console.log("загрузили инфу о пользователе - " + currentUser + userData.name)
+      })
+      .catch((err) => {
+        console.log(`ошибка загрузки стартовых данных ${err}`);
+      });
+  }, []);
 
   function handleEditProfileClick() {
     setIsEditProfilePopupOpen(!isEditProfilePopupOpen);
@@ -42,6 +59,7 @@ function App() {
 
   return (
     <div className="App root">
+      <CurrentUserContext.Provider value={currentUser} >
       <Header />
       <Main
         onEditProfile={handleEditProfileClick}
@@ -140,6 +158,7 @@ function App() {
         isOpen={isPopupWithImageOpen}
         onClose={closeAllPopups}
       />
+      </CurrentUserContext.Provider>
     </div>
   );
 }

@@ -1,4 +1,5 @@
 import React from "react";
+import { CurrentUserContext } from "../context/CurrentUserContext";
 import editAvatarIcon from "../image/icon/edit-avatar.svg";
 import api from "../utils/Api";
 import Card from "./Card";
@@ -8,22 +9,8 @@ function Main(props) {
   const handleEditAvatarClick = props.onEditAvatar;
   const handleAddPlaceClick = props.onAddPlace;
 
-  const [userInfo, setUserInfo] = React.useState([]);
-
-  React.useEffect(() => {
-    api
-      .loadUserInfo()
-      .then((userData) => {
-        setUserInfo({
-          userName: userData.name,
-          userDescription: userData.about,
-          userAvatar: userData.avatar,
-        });
-      })
-      .catch((err) => {
-        console.log(`ошибка загрузки стартовых данных ${err}`);
-      });
-  }, []);
+  const currentUser = React.useContext(CurrentUserContext);
+  console.log("в мейн пришел конткст - " + currentUser);
 
   const [cards, setCards] = React.useState([]);
 
@@ -38,12 +25,33 @@ function Main(props) {
       });
   }, []);
 
+  function handleCardLike(card) {
+    const isLiked = card.likes.some(i => i._id === currentUser._id);
+    !isLiked ? (api.addLike(card).then((newCard) => {
+        setCards((state) => state.map((c) => c._id === card._id ? newCard : c));
+    })) 
+      :
+    (api.removeLike(card).then((newCard) => {
+        setCards((state) => state.map((c) => c._id === card._id ? newCard : c));
+    }));
+    // Отправляем запрос в API и получаем обновлённые данные карточки
+  } 
+
+  function handleCardDelete(card) {
+    api.trashCard(card).then((newCard)=> {
+      console.log(cards);
+      setCards((state) => state.map((c) => c._id === card._id ? newCard : c));
+    })
+  }
+
+// ??????????????????????????????????????????????????????????
+
   return (
     <main className="content">
       <section className="profile">
         <div
           className="profile__avatar-contein"
-          style={{ backgroundImage: `url(${userInfo.userAvatar})` }}
+          style={{ backgroundImage: `url(${currentUser.avatar})` }}
         >
           <div className="profile__avatar-edit">
             <img
@@ -55,13 +63,13 @@ function Main(props) {
           </div>
         </div>
         <div className="profile__info">
-          <h1 className="profile__name">{userInfo.userName}</h1>
+          <h1 className="profile__name">{currentUser.name}</h1>
           <button
             onClick={handleEditProfileClick}
             className="profile__edit-button"
             type="button"
           />
-          <p className="profile__sign">{userInfo.userDescription}</p>
+          <p className="profile__sign">{currentUser.about}</p>
         </div>
         <button
           onClick={handleAddPlaceClick}
@@ -73,11 +81,14 @@ function Main(props) {
         <ul className="cards-list">
           {cards.map((card) => (
             <Card
+              onCardLike={handleCardLike}
+              onCardDelite={handleCardDelete}
               card={card}
               key={card._id}
               onClick={(card) => {
                 props.onCardClick(card);
               }}
+              
             />
           ))}
         </ul>

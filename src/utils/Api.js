@@ -61,24 +61,25 @@ class Api {
   .then(this._checkResponse)
   }
 
-  trashCard(cardId) {
-    return fetch(`${this._baseUrl}/cards/${cardId}`, {
+  trashCard(card) {
+    console.log('запрос на удаление карточки с ID - ' + card._id);
+    return fetch(`${this._baseUrl}/cards/${card._id}`, {
       method: 'DELETE',
       headers: this._headers
   })
   .then(this._checkResponse)
   }
 
-  addLike(cardId) {
-    return fetch(`${this._baseUrl}/cards/${cardId}/likes`, {
+  addLike(card) {
+    return fetch(`${this._baseUrl}/cards/${card._id}/likes`, {
       method: 'PUT',
       headers: this._headers
     })
     .then(this._checkResponse)
   }
 
-  removeLike(cardId) {
-    return fetch(`${this._baseUrl}/cards/${cardId}/likes`, {
+  removeLike(card) {
+    return fetch(`${this._baseUrl}/cards/${card._id}/likes`, {
       method: 'DELETE',
       headers: this._headers
     })
