@@ -22,6 +22,7 @@ function App() {
   const [isPopupWithImageOpen, setIsPopupWithImageOpen] = React.useState(false);
 
   const [currentUser, setCurrentUser] = React.useState({});
+  const [cards, setCards] = React.useState([]);
 
   React.useEffect(() => {
     api
@@ -33,8 +34,6 @@ function App() {
         console.log(`ошибка загрузки стартовых данных ${err}`);
       });
   }, []);
-
-  const [cards, setCards] = React.useState([]);
 
   React.useEffect(() => {
     api
@@ -95,13 +94,13 @@ function App() {
 
   function handleUpdateUser({ name, about }) {
     api.postUserInfo({ name, about });
-    setCurrentUser({ name, about });
+    setCurrentUser({ name: name, about: about, avatar: currentUser.avatar });
     closeAllPopups();
   }
 
   function handleUpdateAvatar(link) {
     api.postUserAvatar(link);
-    setCurrentUser({ avatar: link });
+    setCurrentUser({ avatar: link, name: currentUser.name, about: currentUser.about });
     closeAllPopups();
   }
 
