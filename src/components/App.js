@@ -70,7 +70,9 @@ function App() {
   function handleCardDelete(card) {
     api.trashCard(card).then(() => {
       deleteCard(card);
-    });
+    }).catch((err) => {
+      console.log(`ошибка удаления карты ${err}`);
+    })
   }
 
   function handleEditProfileClick() {
@@ -97,20 +99,28 @@ function App() {
   }
 
   function handleUpdateUser({ name, about }) {
-    api.postUserInfo({ name, about });
-    setCurrentUser({ name: name, about: about, avatar: currentUser.avatar });
+    api.postUserInfo({ name, about }).then(()=>{
+      setCurrentUser({ name: name, about: about, avatar: currentUser.avatar });
+    }).catch((err) => {
+      console.log(`ошибка изменения данных юзера ${err}`);
+    });
     closeAllPopups();
   }
 
   function handleUpdateAvatar(link) {
-    api.postUserAvatar(link);
-    setCurrentUser({ avatar: link, name: currentUser.name, about: currentUser.about });
+    api.postUserAvatar(link).then(()=>{
+      setCurrentUser({ avatar: link, name: currentUser.name, about: currentUser.about })
+    }).catch((err) => {
+      console.log(`ошибка изменения аватара ${err}`);
+    });
     closeAllPopups();
   }
 
   function handlerSubmitNewPlace({ title, link }) {
     api.postNewCard(title, link).then((newCard) => {
       setCards([newCard, ...cards]);
+    }).catch((err) => {
+      console.log(`ошибка добавления нового места ${err}`);
     });
     closeAllPopups();
   }
