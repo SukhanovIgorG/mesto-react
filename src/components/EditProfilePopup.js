@@ -22,7 +22,7 @@ function EditProfilePopup({ isOpen, onClose, onUpdateUser }) {
   React.useEffect(() => {
     setUser(currentUser.name);
     setDescription(currentUser.about);
-  }, [currentUser]);
+  }, [currentUser, isOpen]);
 
   function handleSubmit(e) {
     // Запрещаем браузеру переходить по адресу формы
@@ -44,7 +44,6 @@ function EditProfilePopup({ isOpen, onClose, onUpdateUser }) {
       textButton={"Сохранить"}
       onSubmit={handleSubmit}
     >
-      <>
         <input
           onChange={handleChengeInputUser}
           value={user ? user : ""}
@@ -72,7 +71,6 @@ function EditProfilePopup({ isOpen, onClose, onUpdateUser }) {
           required
         />
         <span className="form__input-error sign-input-error" />
-      </>
     </PopupWithForm>
   );
 }

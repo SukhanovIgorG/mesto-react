@@ -31,18 +31,15 @@ function App() {
         setCurrentUser(userData);
       })
       .catch((err) => {
-        console.log(`ошибка загрузки стартовых данных ${err}`);
+        console.log(`ошибка загрузки данных о пользователе ${err}`);
       });
-  }, []);
-
-  React.useEffect(() => {
-    api
+      api
       .getInitialCards()
       .then((data) => {
         setCards(data);
       })
       .catch((err) => {
-        console.log(`ошибка загрузки стартовых данных ${err}`);
+        console.log(`ошибка загрузки стартовых карточек ${err}`);
       });
   }, []);
 
@@ -53,19 +50,26 @@ function App() {
           setCards((state) =>
             state.map((c) => (c._id === card._id ? newCard : c))
           );
+        }).catch((err) => {
+          console.log(`ошибка добавления лайка ${err}`);
         })
       : api.removeLike(card).then((newCard) => {
           setCards((state) =>
             state.map((c) => (c._id === card._id ? newCard : c))
           );
-        });
+        }).catch((err) => {
+          console.log(`ошибка удаления лайка ${err}`);
+        })
     // Отправляем запрос в API и получаем обновлённые данные карточки
+  };
+
+  function deleteCard(card) {
+    setCards(cards => cards.filter((item) => item._id !== card._id) )
   }
 
   function handleCardDelete(card) {
     api.trashCard(card).then(() => {
-      let newState = cards.filter((item) => item._id !== card._id);
-      setCards(newState);
+      deleteCard(card);
     });
   }
 

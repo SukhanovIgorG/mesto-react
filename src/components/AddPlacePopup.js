@@ -9,6 +9,11 @@ function AddPlacePopup({ isOpen, onClose, onSubmitNewPlace }) {
   const [title, setTitle] = React.useState("");
   const [link, setLink] = React.useState("");
 
+  React.useEffect(()=>{
+    setTitle('');
+    setLink('');
+  },[isOpen, onClose])
+
   function handleChengeInputTitle(e) {
     setTitle(e.target.value);
   }
@@ -37,7 +42,6 @@ function AddPlacePopup({ isOpen, onClose, onSubmitNewPlace }) {
       textButton={"Сохранить"}
       onSubmit={handleSubmit}
     >
-      <>
         <input
           onChange={handleChengeInputTitle}
           value={title ? title : ""}
@@ -62,7 +66,6 @@ function AddPlacePopup({ isOpen, onClose, onSubmitNewPlace }) {
           required
         />
         <span className="form__input-error link-input-error" />
-      </>
     </PopupWithForm>
   );
 }

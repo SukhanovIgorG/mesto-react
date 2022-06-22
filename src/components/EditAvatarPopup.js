@@ -4,6 +4,10 @@ import PopupWithForm from "./PopupWithForm";
 function EditAvatarPopup({ isOpen, onClose, onUpdateAvatar }) {
   const avatarInput = React.useRef();
 
+  React.useEffect(()=>{
+    avatarInput.current.value = '';
+  },[isOpen, onClose])
+
   function hendleClickCloseButton() {
     onClose();
   }
@@ -22,7 +26,6 @@ function EditAvatarPopup({ isOpen, onClose, onUpdateAvatar }) {
       title="Обновить аватар"
       textButton={"Сохранить"}
     >
-      <>
         <input
           ref={avatarInput}
           className="form__input form__input_type_avatar"
@@ -36,7 +39,6 @@ function EditAvatarPopup({ isOpen, onClose, onUpdateAvatar }) {
           autoFocus
         />
         <span className="form__input-error avatar-input-error" />
-      </>
     </PopupWithForm>
   );
 }
